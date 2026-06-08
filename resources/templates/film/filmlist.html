@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Films Popolari | Fidelio</title>
+
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=3">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<div class="page">
+
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="hero hero--compact">
+        <div class="hero-inner">
+            <div class="hero-tagline">
+                <h1>Film vari.</h1>
+                <p>Non sai cosa guardare? Consulta questa lista!</p>
+            </div>
+        </div>
+    </section>
+
+    <main class="content">
+
+        <section class="section">
+            <div class="section-head">
+                <h2>Film in Evidenza</h2>
+            </div>
+
+            <div class="grid">
+                <a class="card"
+                   th:each="film : ${filmsList}"
+                   th:href="@{/film/{id}(id=${film.tmdbId})}">
+
+                    <div class="card-inner">
+                        <div class="poster">
+
+                            <img th:if="${film.posterUrl != null}"
+                                 th:src="${film.posterUrl}"
+                                 th:alt="${film.title}" />
+
+                            <div th:if="${film.posterUrl == null}" class="poster-fallback">
+                                <span th:text="${film.title}">Film</span>
+                            </div>
+
+                            <div class="poster-overlay">
+                                <div class="rating">
+                                    <span th:text="${#numbers.formatDecimal(film.rating, 1, 1)}">8.1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="card" th:if="${filmsList == null || #lists.isEmpty(filmsList)}">
+                    <div class="card-inner">
+                        <div class="poster-fallback"><span>Nessun Film Trovato</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</div>
+</body>
+</html>

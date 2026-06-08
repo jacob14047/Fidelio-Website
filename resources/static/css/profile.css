@@ -1,0 +1,255 @@
+/* Eredita variabili da components.css se presente, altrimenti definiscile qui */
+:root {
+    --bg-dark: #0e1116;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --accent: #f06a2a;
+    --text-main: #ffffff;
+    --text-muted: rgba(255, 255, 255, 0.6);
+}
+
+body.profile-page {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+}
+
+.profile-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 300px 1fr; /* Colonna sinistra fissa, destra flessibile */
+    gap: 40px;
+}
+
+/* === SIDEBAR UTENTE (Sinistra) === */
+.profile-sidebar {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    position: sticky;
+    top: 100px; /* Per rimanere visibile durante lo scroll */
+    height: fit-content;
+}
+
+.profile-avatar-large {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--accent);
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.profile-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.profile-username {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.profile-badge {
+    display: inline-block;
+    background: rgba(240, 106, 42, 0.2);
+    color: var(--accent);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.profile-bio {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 30px;
+    font-style: italic;
+}
+
+.btn-edit {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.btn-edit:hover {
+    background: var(--accent);
+    color: white;
+}
+
+/* === CONTENUTO PRINCIPALE (Destra) === */
+.profile-content {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+.section-title {
+    font-size: 1.4rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    color: var(--accent);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* GRIGLIA RECENSIONI */
+.reviews-grid, .lists-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.review-card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: transform 0.2s;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255,255,255,0.08);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.review-stars {
+    color: #ffd700;
+}
+
+.review-text {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: rgba(255,255,255,0.9);
+}
+
+/* PLACEHOLDER BOXES */
+.placeholder-box {
+    background: rgba(255,255,255,0.03);
+    border: 2px dashed rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.placeholder-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+/* === MODALE DI MODIFICA === */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    backdrop-filter: blur(5px);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-box {
+    background: #1a1d24;
+    padding: 40px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 500px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px; right: 20px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.modal-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.modal-form input, .modal-form textarea {
+    width: 100%;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-family: inherit;
+}
+
+.modal-form input:focus {
+    border-color: var(--accent);
+    outline: none;
+}
+
+.modal-actions {
+    text-align: right;
+}
+
+.btn-save {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile-container {
+        grid-template-columns: 1fr;
+    }
+    .profile-sidebar {
+        position: relative;
+        top: 0;
+    }
+}

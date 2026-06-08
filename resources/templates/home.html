@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Fidelio</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=3">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=3">
+    <link rel="icon" type="image/png" sizes="512x512" href="/images/android-chrome-512x512.png?v=3">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<div class="page">
+
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <!-- HERO (with background image) -->
+    <section class="hero hero--collage">
+        <div class="hero-inner">
+
+            <!-- Hero tagline -->
+            <div class="hero-tagline">
+                <p>
+                    Track what you watch, rate movies, and build lists.<br>
+                    <span>All in one place.</span>
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <main class="content">
+        <!-- Popular -->
+        <section class="section">
+            <div class="section-head">
+                <h2>Popular Films</h2>
+            </div>
+
+            <div class="grid">
+                <!-- Se hai dati -->
+                <a class="card"
+                   th:each="film : ${popularFilms}"
+                   th:href="@{/film/{id}(id=${film.tmdbId})}">
+                    <div class="card-inner">
+                        <div class="poster">
+                            <!-- Se hai posterUrl -->
+                            <img th:if="${film.posterUrl != null}" th:src="${film.posterUrl}" th:alt="${film.title}" />
+                            <div th:if="${film.posterUrl == null}" class="poster-fallback">
+                                <span th:text="${film.title}">Film</span>
+                            </div>
+                        </div>
+
+                        <div th:if="${film.posterUrl == null}" class="poster-fallback">
+                            <span th:text="${film.title}">Film</span>
+                        </div>
+
+                        <!-- Hover overlay -->
+                        <div class="poster-overlay">
+                            <div class="rating">
+                                <span th:text="${#numbers.formatDecimal(film.rating, 1, 1)}">8.1</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Fallback placeholder se lista vuota -->
+                <div class="card" th:if="${popularFilms == null || #lists.isEmpty(popularFilms)}">
+                    <div class="card-inner">
+                        <div class="poster-fallback"><span>Film 1</span></div>
+                    </div>
+                </div>
+                <div class="card" th:if="${popularFilms == null || #lists.isEmpty(popularFilms)}">
+                    <div class="card-inner">
+                        <div class="poster-fallback"><span>Film 2</span></div>
+                    </div>
+                </div>
+                <div class="card" th:if="${popularFilms == null || #lists.isEmpty(popularFilms)}">
+                    <div class="card-inner">
+                        <div class="poster-fallback"><span>Film 3</span></div>
+                    </div>
+                </div>
+                <div class="card" th:if="${popularFilms == null || #lists.isEmpty(popularFilms)}">
+                    <div class="card-inner">
+                        <div class="poster-fallback"><span>Film 4</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Releases -->
+        <section class="section">
+            <div class="section-head">
+                <h2>New Releases</h2>
+            </div>
+
+            <div class="grid">
+                <a class="card"
+                   th:each="film : ${newReleases}"
+                   th:href="@{/film/{id}(id=${film.tmdbId})}">
+
+                    <div class="card-inner">
+                        <div class="poster">
+
+                            <img th:if="${film.posterUrl != null}"
+                                 th:src="${film.posterUrl}"
+                                 th:alt="${film.title}" />
+
+                            <div th:if="${film.posterUrl == null}" class="poster-fallback">
+                                <span th:text="${film.title}">Film</span>
+                            </div>
+2
+                            <!-- Hover overlay (DEVE stare dentro .poster) -->
+                            <div class="poster-overlay">
+                                <div class="rating">
+                                    <span th:text="${#numbers.formatDecimal(film.rating, 1, 1)}">8.1</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </a>
+
+
+                <!-- Placeholder se vuota -->
+                <div class="card" th:if="${newReleases == null || #lists.isEmpty(newReleases)}">
+                    <div class="card-inner">
+                        <div class="poster-fallback"><span>Film 1</span></div>
+                    </div>
+                </div>
+                <div class="card" th:if="${newReleases == null || #lists.isEmpty(newReleases)}">
+                    <div class="card-inner">
+                        <div class="poster-fallback"><span>Film 2</span></div>
+                    </div>
+                </div>
+                <div class="card" th:if="${newReleases == null || #lists.isEmpty(newReleases)}">
+                    <div class="card-inner">
+                        <div class="poster-fallback"><span>Film 3</span></div>
+                    </div>
+                </div>
+                <div class="card" th:if="${newReleases == null || #lists.isEmpty(newReleases)}">
+                    <div class="card-inner">
+                        <div class="poster-fallback"><span>Film 4</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES -->
+        <section class="features">
+            <div class="features-inner">
+                <div class="features-head">
+                    <h2>What you can do on Fidelio</h2>
+                    <p>All the tools you need to track, review and share your cinema journey.</p>
+                </div>
+
+                <div class="features-grid">
+                    <article class="feature-card">
+                        <div class="feature-icon">🎬</div>
+                        <h3>Track your watched films</h3>
+                        <p>Keep a personal history of every movie you’ve seen, all in one place.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon">✍️</div>
+                        <h3>Write reviews</h3>
+                        <p>Comment anything you want through detailed reviews and ratings.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon">📌</div>
+                        <h3>Public & private lists</h3>
+                        <p>Create lists to organize movies and share them with your friends.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon">✨</div>
+                        <h3>Recommendations</h3>
+                        <p>Browse a recommendation feed generated by the system based on your taste.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h3>Communities</h3>
+                        <p>Create and join communities to talk about any topic you want.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon">📓</div>
+                        <h3>Film diary</h3>
+                        <p>Keep a chronological record of everything you watch, rate and review.</p>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ML RECOMMENDATIONS PREVIEW -->
+        <section class="ml-reco">
+            <div class="ml-reco-inner">
+
+                <div class="ml-reco-text">
+                    <h2>Recommended for you</h2>
+                    <p class="ml-reco-subtitle">
+                        Powered by our ML recommender system, built from your watches, ratings and reviews.
+                    </p>
+
+                    <a th:href="@{/signup}" class="ml-reco-cta">
+                        Get Started
+                    </a>
+                </div>
+
+                <div class="ml-reco-grid">
+                    <div class="ml-reco-poster"
+                         th:each="film : ${mlPreview}">
+                        <img th:if="${film.posterUrl != null}"
+                             th:src="${film.posterUrl}"
+                             th:alt="${film.title}" />
+                    </div>
+                </div>
+
+
+            </div>
+        </section>
+
+        <!-- REGISTRATION BENEFITS (CARDS) -->
+        <section class="plans" id="plans">
+            <div class="plans-inner">
+
+                <div class="plans-head">
+                    <h2>Registration that grows with you</h2>
+                    <p>Choose your profile. Upgrade your experience as you become more active on Fidelio.</p>
+                </div>
+
+                <div class="plans-grid">
+
+                    <!-- Cinefilo -->
+                    <article class="plan-card is-active" data-plan="cinefilo" tabindex="0" role="button" aria-label="Select Cinefilo">
+                        <div class="plan-top">
+                            <div>
+                                <h3 class="plan-title">Cinefilo</h3>
+                                <p class="plan-sub">Track, rate and build your diary</p>
+                            </div>
+                        </div>
+
+                        <a class="plan-cta" th:href="@{/signup?tier=cinefilo}">Create account</a>
+
+                        <hr class="plan-divider" />
+
+                        <ul class="plan-list">
+                            <li>Track every movie you watch</li>
+                            <li>Rate films and keep a personal diary</li>
+                            <li>Create public & private lists</li>
+                            <li>Get a personalized recommendation feed</li>
+                        </ul>
+                    </article>
+
+                    <!-- Critico -->
+                    <article class="plan-card plan-card--featured" data-plan="critico" tabindex="0" role="button" aria-label="Select Critico">
+                        <div class="plan-top">
+                            <div class="plan-icon" aria-hidden="true">
+                                <svg class="icon-badge verified-blue" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-1.9 14.7l-3.3-3.3 1.4-1.4 1.9 1.9 4.6-4.6 1.4 1.4-6 6z"/>
+                                </svg>
+                            </div>
+
+                            <div>
+                                <h3 class="plan-title">Critico <span class="plan-pill">Verified</span></h3>
+                                <p class="plan-sub">Write verified reviews & replies</p>
+                            </div>
+                        </div>
+
+                        <a class="plan-cta" th:href="@{/signup?tier=critico}">Get verified</a>
+
+                        <hr class="plan-divider" />
+
+                        <ul class="plan-list">
+                            <li>Write reviews as a verified critic</li>
+                            <li>Post verified replies inside threads</li>
+                            <li>Higher visibility for your reviews</li>
+                            <li>Advanced review tools (drafts, edits)</li>
+                        </ul>
+                    </article>
+
+                    <!-- Fedele -->
+                    <article class="plan-card" data-plan="fedele" tabindex="0" role="button" aria-label="Select Fedele">
+                        <div class="plan-top">
+                            <div class="plan-icon" aria-hidden="true">
+                                <svg class="icon-badge troupe-gold" viewBox="0 0 24 24">
+                                    <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>
+                                </svg>
+                            </div>
+
+                            <div>
+                                <h3 class="plan-title">Fedele <span class="plan-pill plan-pill--accent">Community</span></h3>
+                                <p class="plan-sub">Create and manage communities</p>
+                            </div>
+                        </div>
+
+                        <a class="plan-cta" th:href="@{/signup?tier=fedele}">Start a community</a>
+
+                        <hr class="plan-divider" />
+
+                        <ul class="plan-list">
+                            <li>Create public or private communities</li>
+                            <li>Moderation tools (rules, roles, pinned posts)</li>
+                            <li>Create themed threads and discussion spaces</li>
+                            <li>Build your own corner of Fidelio</li>
+                        </ul>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="section community-feature" id="community">
+            <div class="container community-feature__grid">
+
+                <!-- LEFT: copy -->
+                <div class="community-feature__content">
+                    <p class="eyebrow">Community</p>
+                    <h2 class="section-title">Crea, gestisci e fai crescere la tua community cinefila</h2>
+
+                    <p class="section-subtitle">
+                        Apri thread tematici, lancia discussioni, rispondi ai commenti e costruisci un gruppo di persone
+                        con i tuoi stessi gusti. Con il profilo <strong>Fedele</strong> puoi creare community e moderare conversazioni.
+                    </p>
+
+                    <ul class="feature-list">
+                        <li><span class="dot"></span>Thread, risposte e reazioni in tempo reale</li>
+                        <li><span class="dot"></span>Ruoli e moderazione (owner / mod / membri)</li>
+                        <li><span class="dot"></span>Topic, tag e feed personalizzato</li>
+                    </ul>
+
+                    <div class="community-feature__actions">
+                        <a class="btn" th:href="@{/signup?tier=fedele}">Create a Community</a>
+                        <a class="btn" th:href="@{/communities}">Browse Communities</a>
+                    </div>
+                </div>
+
+                <!-- RIGHT: preview mock -->
+                <div class="community-feature__preview" aria-hidden="true">
+                    <div class="community-preview">
+                        <div class="community-preview__topbar">
+                            <div class="window-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="community-preview__tabs">
+                                <span class="tab active" style="color:var(--text); border-bottom:2px solid var(--accent);">Thread: Eyes Wide Shut</span>
+                            </div>
+                        </div>
+
+                        <div class="community-preview__body" style="grid-template-columns: 200px 1fr;"> <!-- 2 Colonne -->
+
+                            <!-- SIDEBAR (Topics) -->
+                            <aside class="community-preview__sidebar">
+                                <div class="chip">🎭 Kubrick</div>
+                                <div class="chip">🧟 Horror</div>
+                                <div class="chip">🌌 Sci-Fi</div>
+                                <div class="chip muted" style="border-style:dashed;">+ New Topic</div>
+                            </aside>
+
+                            <!-- MAIN (Thread View) -->
+                            <main class="community-preview__main" style="display:flex; flex-direction:column; gap:12px;">
+
+                                <!-- POST PRINCIPALE (Thread Starter) -->
+                                <div class="thread-card" style="border-left: 3px solid var(--accent);">
+                                    <div class="thread-card__header" style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                                        <div style="width:20px; height:20px; background:var(--accent); border-radius:50%;"></div>
+                                        <span style="font-weight:700; font-size:12px; color:white;">Fidelio (Admin)</span>
+                                        <span style="color:#666; font-size:11px;">2h ago</span>
+                                    </div>
+                                    <div class="thread-card__title" style="font-size:14px; line-height:1.4;">
+                                        “Eyes Wide Shut” — Qual è la vostra interpretazione sulla scena della maschera sul cuscino?
+                                    </div>
+                                    <div class="thread-card__stats" style="margin-top:8px;">
+                                        <span>❤️ 42 Likes</span>
+                                    </div>
+                                </div>
+
+                                <!-- RISPOSTE (Stile Chat/Commenti) -->
+                                <div class="chat-stack">
+                                    <!-- Risposta 1 -->
+                                    <div class="bubble left" style="align-self:flex-start; max-width:85%;">
+                                        <div class="bubble__name" style="font-weight:700; font-size:11px; color:#888; margin-bottom:4px;">Sara</div>
+                                        Secondo me rappresenta la fine dell'illusione. Alice sa tutto.
+                                    </div>
+
+                                    <!-- Risposta 2 (Utente Fedele) -->
+                                    <div class="bubble right" style="align-self:flex-end; max-width:85%; background:rgba(240,106,42,.1); border-color:rgba(240,106,42,.3);">
+                                        <div class="bubble__name" style="font-weight:700; font-size:11px; color:var(--accent); margin-bottom:4px;">Matteo (Fedele)</div>
+                                        Esatto! È il simbolo che il sogno (o l'incubo) è entrato nella realtà coniugale.
+                                    </div>
+
+                                    <!-- Risposta 3 (Critico) -->
+                                    <div class="bubble left" style="align-self:flex-start; max-width:85%;">
+                                        <div class="bubble__name" style="font-weight:700; font-size:11px; color:#888; margin-bottom:4px;">Paolo (Critico)</div>
+                                        Notate anche come la maschera sia quella che lui ha perso... o che gli hanno fatto trovare?
+                                    </div>
+                                </div>
+
+                                <!-- INPUT FINTO -->
+                                <div class="community-preview__footer" style="margin-top:auto;">
+                                    <div class="input-mock">Scrivi un commento...</div>
+                                    <div class="send-mock">↵</div>
+                                </div>
+                            </main>
+
+                            <!-- (Colonna Membri rimossa per coerenza con la tua richiesta) -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</div>
+
+<script th:src="@{/js/home.js}">
+</script>
+<script th:src="@{/js/auth.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // Thymeleaf inietta l'oggetto Java direttamente qui come JSON
+    const serverUser = /*[[${userDTO}]]*/ null;
+
+    if (serverUser) {
+        console.log("Utente sincronizzato:", serverUser);
+        localStorage.setItem("user", JSON.stringify(serverUser));
+    } else {
+        localStorage.removeItem("user");
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilo Utente - Fidelio</title>
+
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        .admin-section {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-family: 'Inter', sans-serif; /* Assicura che tutto usi Inter */
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .admin-table th {
+            text-align: left;
+            padding: 15px;
+            background: rgba(240, 106, 42, 0.15);
+            color: #f06a2a;
+            /* Modificato: ora usa Inter come il resto del profilo */
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase; /* Per mantenere leggibilità ed eleganza */
+            letter-spacing: 0.5px;
+        }
+        .admin-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+            font-family: 'Inter', sans-serif;
+        }
+        .admin-table tr:last-child td { border-bottom: none; }
+
+        .btn-delete {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.2s;
+        }
+        .btn-delete:hover { background: #e60000; }
+
+        .badge-role {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            background: rgba(255,255,255,0.1);
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="profile-page">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="profile-container">
+
+    <aside class="profile-sidebar">
+        <img th:if="${utenteCorrente.immagineProfilo != null}"
+             th:src="@{'data:image/jpeg;base64,' + ${@utenteService.encodeToBase64(utenteCorrente.immagineProfilo)}}"
+             class="profile-avatar-large" alt="Avatar">
+
+        <img th:unless="${utenteCorrente.immagineProfilo != null}"
+             src="https://ui-avatars.com/api/?name=User&background=random&color=fff&size=150"
+             class="profile-avatar-large" alt="Default Avatar">
+
+        <h1 class="profile-name" th:text="${utenteCorrente.nome + ' ' + utenteCorrente.cognome}">Nome Cognome</h1>
+        <p class="profile-username" th:text="'@' + ${utenteCorrente.username}">@username</p>
+
+        <div class="profile-badge"
+             th:text="${utenteCorrente.amministratore} ? 'AMMINISTRATORE' : ${utenteCorrente.dtype}"
+             th:style="${utenteCorrente.amministratore} ? 'border-color: #ffd700; color: #ffd700;' : ''">
+            CINEFILO
+        </div>
+
+        <p class="profile-bio" th:text="${utenteCorrente.bio != null && !utenteCorrente.bio.isEmpty()} ? ${utenteCorrente.bio} : 'Nessuna biografia inserita...'">
+            Lorem ipsum dolor sit amet...
+        </p>
+
+        <button class="btn-edit" onclick="openModal()">Modifica Profilo</button>
+
+        <div style="margin-top: 20px; font-size: 0.85rem; color: #888;" th:if="${utenteCorrente.dtype == 'Critico'}">
+            <p>Testata: <span style="color:white" th:text="${utenteCorrente.testataGiornalistica}"></span></p>
+        </div>
+    </aside>
+
+    <main class="profile-content">
+
+        <section>
+            <h2 class="section-title">Le tue Recensioni</h2>
+            <div class="reviews-grid" th:if="${recensioni != null and !recensioni.isEmpty()}">
+                <div class="review-card" th:each="recensione : ${recensioni}">
+                    <div class="review-header">
+                        <span th:text="${#temporals.format(recensione.dataCreazione, 'dd/MM/yyyy')}">01/01/2024</span>
+                        <div class="review-stars">
+                            <span th:text="${recensione.voto} + '/5 ★'">5/5 ★</span>
+                        </div>
+                    </div>
+                    <p style="font-weight:bold; margin-bottom:5px;">Film ID: <span th:text="${recensione.filmTmdbId}">123</span></p>
+                    <p class="review-text" th:text="${recensione.testo}">Testo...</p>
+                </div>
+            </div>
+            <div class="placeholder-box" th:if="${recensioni == null or recensioni.isEmpty()}">
+                <div class="placeholder-icon">📝</div>
+                <p>Non hai ancora scritto nessuna recensione.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Liste Private</h2>
+            <div class="lists-grid" th:if="${listePrivate != null and !listePrivate.isEmpty()}">
+                <div class="review-card" th:each="lista : ${listePrivate}">
+                    <h3 th:text="${lista.nome}">Nome Lista</h3>
+                    <p th:text="${lista.descrizione}" style="font-size:0.9rem; color:#aaa;"></p>
+                </div>
+            </div>
+            <div class="placeholder-box" th:if="${listePrivate == null or listePrivate.isEmpty()}">
+                <div class="placeholder-icon">🔒</div>
+                <p>Nessuna lista privata creata (Coming Soon).</p>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Raccomandati per Te (AI)</h2>
+
+            <div class="lists-grid" th:if="${filmRaccomandati != null and !filmRaccomandati.isEmpty()}">
+                <div class="review-card" th:each="film : ${filmRaccomandati}"
+                     style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+
+                    <img th:if="${film.posterPath != null}"
+                         th:src="${'https://image.tmdb.org/t/p/w200' + film.posterPath}"
+                         style="width: 100%; max-width: 150px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);"
+                         alt="Poster">
+
+                    <h3 th:text="${film.title}" style="font-size: 1rem; margin-bottom: 5px; color: #fff;">Titolo Film</h3>
+
+                    <div style="font-size: 0.85rem; color: #aaa; width: 100%; display: flex; justify-content: space-around;">
+                        <span th:text="${film.releaseDate}">2023</span>
+                        <span style="color: #ffd700;">★ <span th:text="${#numbers.formatDecimal(film.voteAverage, 1, 1)}">8.5</span></span>
+                    </div>
+
+                    <a th:href="@{'/film/' + ${film.id}}"
+                       style="margin-top: 10px; font-size: 0.8rem; text-decoration: none; color: #f06a2a; border: 1px solid #f06a2a; padding: 4px 8px; border-radius: 4px;">
+                        Vedi
+                    </a>
+                </div>
+            </div>
+
+            <div class="placeholder-box" th:if="${filmRaccomandati == null or filmRaccomandati.isEmpty()}">
+                <div class="placeholder-icon">🤖</div>
+                <p>Aggiungi dei film alle tue liste private per attivare l'AI!</p>
+                <small style="color: #666;">(O assicurati che il server Python sia acceso)</small>
+            </div>
+        </section>
+
+        <section class="admin-section" th:if="${utenteCorrente.amministratore}">
+            <h2 class="section-title" style="color: #ffd700; border-color: rgba(255, 215, 0, 0.3);">
+                Dashboard Amministratore
+            </h2>
+
+            <h3 style="margin-bottom:15px; font-family:'Inter', sans-serif; font-weight:600;">Tutti gli Utenti</h3>
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Ruolo</th>
+                        <th>Azioni</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="u : ${listaUtenti}" th:if="${u.id != utenteCorrente.id}">
+                        <td th:text="${u.id}">1</td>
+                        <td th:text="${u.username}">user</td>
+                        <td th:text="${u.email}">email@test.com</td>
+                        <td>
+                            <span class="badge-role" th:text="${u.dtype}">CINEFILO</span>
+                            <span th:if="${u.amministratore}" style="color:#ffd700; font-weight:bold;"> (ADMIN)</span>
+                        </td>
+                        <td>
+                            <form th:action="@{/admin/eliminaUtente}" method="post"
+                                  onsubmit="return confirm('Sei sicuro di voler eliminare questo utente?');">
+                                <input type="hidden" name="utenteId" th:value="${u.id}">
+                                <button type="submit" class="btn-delete">Elimina</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${listaUtenti == null or listaUtenti.size() <= 1}">
+                        <td colspan="5" style="text-align:center; color:#888;">Nessun altro utente trovato.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="margin-bottom:15px; font-family:'Inter', sans-serif; font-weight:600;">Recensioni Segnalate</h3>
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                    <tr>
+                        <th>ID Segn.</th>
+                        <th>Autore Rec.</th>
+                        <th>Motivo Segnalazione</th>
+                        <th>Testo Recensione</th>
+                        <th>Azioni</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="s : ${listaSegnalazioni}">
+                        <td th:text="${s.id}">1</td>
+                        <td th:text="${s.recensione.autore.username}">autore</td>
+                        <td th:text="${s.motivo}" style="color: #ff6b6b;">Offensivo</td>
+                        <td>
+                            <span th:text="${#strings.abbreviate(s.recensione.testo, 50)}">Testo...</span>
+                        </td>
+                        <td>
+                            <form th:action="@{/admin/eliminaRecensione}" method="post"
+                                  onsubmit="return confirm('Vuoi davvero eliminare questa recensione?');">
+                                <input type="hidden" name="recensioneId" th:value="${s.recensione.id}">
+                                <button type="submit" class="btn-delete">Elimina Recensione</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${listaSegnalazioni == null or listaSegnalazioni.isEmpty()}">
+                        <td colspan="5" style="text-align:center; color:#888;">Nessuna segnalazione aperta.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<div class="modal-overlay" id="editModal">
+    <div class="modal-box" style="max-height: 90vh; overflow-y: auto;">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <h2 style="margin-bottom: 20px;">Modifica Profilo</h2>
+
+        <form class="modal-form" th:action="@{/profilo/aggiorna}" method="POST" enctype="multipart/form-data">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <label for="editNome">Nome</label>
+                    <input type="text" id="editNome" name="nome" th:value="${utenteCorrente.nome}" required>
+                </div>
+                <div>
+                    <label for="editCognome">Cognome</label>
+                    <input type="text" id="editCognome" name="cognome" th:value="${utenteCorrente.cognome}" required>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <label for="editUsername">Username</label>
+                    <input type="text" id="editUsername" name="username" th:value="${utenteCorrente.username}" required>
+                </div>
+                <div>
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail" name="email" th:value="${utenteCorrente.email}" required>
+                </div>
+            </div>
+            <label for="editIndirizzo">Via e Numero Civico</label>
+            <input type="text" id="editIndirizzo" name="viaENumCivico" th:value="${utenteCorrente.viaENumCivico}">
+
+            <label for="editPass">Nuova Password (lascia vuoto per non cambiare)</label>
+            <input type="password" id="editPass" name="nuovaPassword" placeholder="••••••••">
+
+            <div th:if="${utenteCorrente.dtype == 'Critico'}">
+                <label for="editTestata">Testata Giornalistica</label>
+                <input type="text" id="editTestata" name="testata" th:value="${utenteCorrente.testataGiornalistica}">
+            </div>
+
+            <div th:if="${utenteCorrente.dtype == 'Fedele'}">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                        <label for="editCasa">Casa Produzione</label>
+                        <input type="text" id="editCasa" name="casa" th:value="${utenteCorrente.casaProduzione}">
+                    </div>
+                    <div>
+                        <label for="editCredit">Credit Reference</label>
+                        <input type="text" id="editCredit" name="credit" th:value="${utenteCorrente.creditReference}">
+                    </div>
+                </div>
+            </div>
+
+            <label for="editBio">Biografia</label>
+            <textarea id="editBio" name="bio" rows="3" th:text="${utenteCorrente.bio}"></textarea>
+
+            <label for="editImg">Nuova Foto Profilo</label>
+            <input type="file" id="editImg" name="immagine" accept="image/*">
+
+            <div class="modal-actions">
+                <button type="submit" class="btn-save">Salva Modifiche</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script>
+    const modal = document.getElementById('editModal');
+    function openModal() { modal.classList.add('active'); }
+    function closeModal() { modal.classList.remove('active'); }
+    window.onclick = function(event) { if (event.target == modal) closeModal(); }
+</script>
+
+</body>
+</html>

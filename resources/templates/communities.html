@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Communities - Fidelio</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/components.css}" />
+    <!-- Qui dentro ora c'è tutto lo stile necessario -->
+    <link rel="stylesheet" th:href="@{/css/community.css}" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- NAVBAR Sticky -->
+    <div class="topnav">
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
+    </div>
+
+    <!-- CONTENUTO PRINCIPALE -->
+    <div class="page-wrapper">
+
+        <!-- Hero Section -->
+        <header class="comm-hero">
+            <h1 class="hero-title">Esplora le Community</h1>
+            <p class="hero-sub">Trova il tuo gruppo, partecipa alle discussioni e condividi la tua passione per il cinema.</p>
+
+            <button id="createBtn" onclick="openModal()" class="btn primary" style="padding: 12px 24px; font-size: 16px;">
+                + Crea Nuova Community
+            </button>
+        </header>
+
+        <!-- Griglia Card -->
+        <main class="comm-grid" id="communityContainer">
+            <div style="grid-column: 1/-1; text-align: center; color: #666; padding: 40px;">
+                Caricamento community...
+            </div>
+        </main>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div th:replace="~{fragments/footer :: footer}"></div>
+    </footer>
+
+    <!-- MODALE CREAZIONE -->
+    <div class="modal-overlay" id="createModal">
+        <div class="modal-box">
+            <h2 class="modal-title">Crea Community</h2>
+            <form id="createCommunityForm">
+                <div>
+                    <label style="display:block; margin-bottom:8px; font-size:13px; color:#aaa; font-weight:600;">NOME</label>
+                    <input type="text" id="cName" class="modal-input" required placeholder="Es. Fans di Kubrick">
+                </div>
+                <div>
+                    <label style="display:block; margin-bottom:8px; font-size:13px; color:#aaa; font-weight:600;">DESCRIZIONE</label>
+                    <textarea id="cDesc" class="modal-input" rows="4" required placeholder="Di cosa si parla qui?"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeModal()" class="btn">Annulla</button>
+                    <button type="submit" class="btn primary">Crea Community</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script th:src="@{/js/communities.js}"></script>
+</body>
+</html>

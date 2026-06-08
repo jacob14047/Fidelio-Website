@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title th:text="${movie.title} + ' • Fidelio'">Movie • Fidelio</title>
+    <link rel="stylesheet" th:href="@{/css/movie-details.css}">
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="alert success"
+     th:if="${listSuccessMessage}">
+    <span th:text="${listSuccessMessage}"></span>
+</div>
+
+
+<div id="addToListModal" class="addlist-overlay">
+
+    <div class="addlist-card">
+        <h3>Aggiungi alla lista</h3>
+
+        <form id="addToListForm"
+              method="post">
+
+            <input type="hidden" name="tmdbId"
+                   th:value="${movie.tmdbId}"/>
+
+            <div class="form-group">
+                <label>Seleziona una lista</label>
+                <select name="listId"
+                        onchange="updateListAction(this)"
+                        required>
+                    <option value="">-- Scegli una lista --</option>
+                    <option th:each="l : ${userLists}"
+                            th:value="${l.id}"
+                            th:text="${l.nome + ((filmInListe[l.id] == true) ? ' ✓ già presente' : '')}"
+                            th:disabled="${filmInListe[l.id] == true}"
+                    >
+                    </option>
+                </select>
+            </div>
+
+            <div class="addlist-actions">
+                <button type="submit" class="btn-primary">
+                    Salva
+                </button>
+
+                <button type="button"
+                        class="btn-secondary"
+                        onclick="closeAddToListModal()">
+                    Annulla
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+
+<section class="movie-hero" th:style="${movie.backdropUrl != ''} ? 'background-image: url(' + ${movie.backdropUrl} + ');' : ''">
+    <div class="hero-scrim"></div>
+    <div class="hero-content">
+        <div class="poster-wrap">
+            <img class="poster" th:if="${movie.posterUrl != ''}" th:src="${movie.posterUrl}" th:alt="${movie.title}"/>
+            <div class="poster-fallback" th:if="${movie.posterUrl == ''}">
+                <span th:text="${movie.title}">Poster</span>
+            </div>
+        </div>
+        <div class="meta">
+            <div class="title-row">
+                <h1 class="title">
+                    <span th:text="${movie.title}">Title</span>
+                    <span class="year" th:if="${movie.year != ''}" th:text="'(' + ${movie.year} + ')'">(2025)</span>
+                </h1>
+                <div class="rating-pill" th:if="${movie.rating > 0}">
+                    <span class="score" th:text="${#numbers.formatDecimal(movie.rating,1,1)}">8.1</span>
+                    <span class="votes" th:text="${movie.votes}">1200</span>
+                </div>
+            </div>
+            <p class="tagline" th:if="${movie.tagline != ''}" th:text="${movie.tagline}">Tagline</p>
+            <div class="facts">
+                <span th:if="${movie.runtimeLabel != ''}" th:text="${movie.runtimeLabel}">2h 10m</span>
+                <span class="dot" th:if="${movie.runtimeLabel != '' && !movie.genres.isEmpty()}">•</span>
+                <span class="genres" th:if="${!movie.genres.isEmpty()}">
+                    <span th:each="g, i : ${movie.genres}">
+                        <span th:text="${g}">Drama</span><span th:if="${!i.last}">, </span>
+                    </span>
+                </span>
+            </div>
+
+            <div class="actions">
+
+                <button class="btn"
+                        type="button"
+                        th:if="${utenteLoggato != null}"
+                        onclick="openAddToListModal()">
+                    + Aggiungi alla lista
+                </button>
+
+                <a th:if="${utenteLoggato == null}"
+                   th:href="@{/login}"
+                   class="btn">
+                    + Aggiungi alla lista
+                </a>
+
+
+                <button class="btn primary" type="button" th:disabled="${utenteLoggato == null}">Log</button>
+                <button class="btn" type="button" th:disabled="${utenteLoggato == null}">Watchlist</button>
+                <button class="btn" type="button" th:disabled="${utenteLoggato == null}">Like</button>
+                <button id="open-review-btn" class="btn primary" type="button"
+                        th:if="${utenteLoggato != null}"
+                        onclick="openReviewModal()">Scrivi Recensione</button>
+                <a th:if="${utenteLoggato == null}" th:href="@{/login}" class="btn primary">Login to Review</a>
+            </div>
+
+            <div class="overview" th:if="${movie.overview != ''}">
+                <h2>Overview</h2>
+                <p th:text="${movie.overview}">Overview text...</p>
+            </div>
+
+            <div class="crew" th:if="${!movie.directors.isEmpty()}">
+                <h3>Director</h3>
+                <div class="crew-list">
+                    <a class="person-chip" th:each="p : ${movie.directors}" th:href="@{/people/{id}(id=${p.id})}">
+                        <span class="name" th:text="${p.name}">Name</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="movie-section" th:if="${!movie.castTop.isEmpty()}">
+    <div class="section-head">
+        <h2>Cast</h2>
+    </div>
+    <div class="cast-row">
+        <a class="cast-card" th:each="p : ${movie.castTop}" th:href="@{/people/{id}(id=${p.id})}">
+            <div class="avatar">
+                <img th:if="${p.profileUrl != ''}" th:src="${p.profileUrl}" th:alt="${p.name}">
+                <div class="avatar-fallback" th:if="${p.profileUrl == ''}"></div>
+            </div>
+            <div class="cast-meta">
+                <div class="cast-name" th:text="${p.name}">Actor</div>
+                <div class="cast-role" th:text="${p.roleLabel}">Role</div>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section class="section reviews-section">
+    <div class="section-head reviews-head">
+        <h2>Recensioni</h2>
+    </div>
+
+    <div class="reviews-stack" th:if="${!#lists.isEmpty(popularReviews)}">
+        <article class="review-row" th:each="r : ${popularReviews}">
+            <header class="review-head">
+                <div class="review-user">
+                    <div class="avatar avatar--accent" th:text="${r.avatarInitial}">U</div>
+                    <div class="user-meta">
+                        <div class="user-row">
+                            <span class="username" th:text="${r.username}">user</span>
+                            <span class="verified-badge" th:if="${r.dtype == 'Critico'}" title="Critico verificato">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="12" r="10" fill="#1DA1F2"/>
+                                    <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="subline">
+                            <span class="stars" th:text="${r.starsText}">★★★★★</span>
+                            <span class="dot">•</span>
+                            <span class="date" th:text="${r.dateLabel}">2026-01-01</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="review-body">
+                <p th:text="${r.contentPreview}">...</p>
+            </div>
+
+            <div class="review-actions" th:if="${r.local}">
+
+                <form class="like-form inline-form"
+                      th:action="@{'/film/' + ${movie.tmdbId} + '/recensioni/' + ${r.localReviewId} + '/like'}"
+                      method="post"
+                      th:if="${utenteLoggato != null and !r.username.equals(utenteLoggato.username)}">
+
+                    <button type="submit" class="btn-vote like-btn"
+                            th:classappend="${likeGiaFatti.contains(r.localReviewId)} ? 'voted-active' : ''">
+                        👍 <span class="like-count" th:text="${r.numLike}">0</span>
+                    </button>
+                </form>
+
+                <span th:if="${utenteLoggato == null or (utenteLoggato != null and r.username.equals(utenteLoggato.username))}"
+                      class="like-display" style="opacity: 0.7;">👍 <span th:text="${r.numLike}">0</span></span>
+
+                <form class="dislike-form inline-form"
+                      th:action="@{'/film/' + ${movie.tmdbId} + '/recensioni/' + ${r.localReviewId} + '/dislike'}"
+                      method="post"
+                      th:if="${utenteLoggato != null and !r.username.equals(utenteLoggato.username)}">
+
+                    <button type="submit" class="btn-vote dislike-btn"
+                            th:classappend="${dislikeGiaFatti.contains(r.localReviewId)} ? 'voted-active' : ''">
+                        👎 <span class="dislike-count" th:text="${r.numDislike}">0</span>
+                    </button>
+                </form>
+
+                <span th:if="${utenteLoggato == null or (utenteLoggato != null and r.username.equals(utenteLoggato.username))}"
+                      class="dislike-display" style="opacity: 0.7;">👎 <span th:text="${r.numDislike}">0</span></span>
+
+                <form class="delete-form inline-form"
+                      th:action="@{'/film/' + ${movie.tmdbId} + '/recensioni/' + ${r.localReviewId} + '/elimina'}"
+                      method="post"
+                      th:if="${utenteLoggato != null and r.username.equals(utenteLoggato.username)}"
+                      onsubmit="return confirm('Vuoi davvero eliminare questa recensione?')">
+                    <button type="submit" class="btn-action btn-delete">Elimina</button>
+                </form>
+
+                <form class="report-form inline-form"
+                      th:action="@{'/film/' + ${movie.tmdbId} + '/recensioni/' + ${r.localReviewId} + '/segnala'}"
+                      method="post"
+                      th:if="${utenteLoggato != null and !segnalazioniGiaFatte.contains(r.localReviewId) and !r.username.equals(utenteLoggato.username)}">
+                    <button type="submit" class="btn-action btn-report">⚠️ Segnala</button>
+                </form>
+                <span th:if="${utenteLoggato != null and segnalazioniGiaFatte.contains(r.localReviewId)}"
+                      class="already-reported">⚠️ Già segnalata</span>
+            </div>
+
+            <div class="comments-section" th:if="${r.comments != null and !#lists.isEmpty(r.comments)}">
+                <div class="comment" th:each="c : ${r.comments}">
+                    <div class="comment-header">
+                        <strong th:text="${c.username}">user</strong>
+                        <span class="verified-badge" th:if="${c.dtype == 'Critico'}" title="Critico verificato">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" fill="#1DA1F2"/>
+                                <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <span class="comment-date" th:text="${c.date}">data</span>
+                    <p th:text="${c.testo}">commento</p>
+                </div>
+            </div>
+
+            <div class="add-comment-section" th:if="${r.local and utenteLoggato != null}">
+                <form class="comment-form" th:action="@{'/film/' + ${movie.tmdbId} + '/recensioni/' + ${r.localReviewId} + '/commenta'}" method="post">
+                    <textarea name="testo" placeholder="Scrivi un commento..." required></textarea>
+                    <button type="submit" class="btn-action">Invia commento</button>
+                </form>
+            </div>
+        </article>
+    </div>
+
+    <div class="empty-state" th:if="${#lists.isEmpty(popularReviews)}">
+        <p>Nessuna recensione ancora.</p>
+    </div>
+</section>
+
+<div id="reviewModal" class="modal-overlay">
+    <div class="modal-container">
+        <button class="modal-close" onclick="closeReviewModal()">&times;</button>
+        <div class="modal-flex">
+            <div class="modal-poster-side">
+                <img th:if="${movie.posterUrl != ''}" th:src="${movie.posterUrl}" th:alt="${movie.title}" class="review-poster-img">
+            </div>
+            <div class="modal-form-side">
+                <h2 class="review-title">Scrivi Recensione</h2>
+                <form th:action="@{/film/{id}/recensioni/nuova(id=${movie.tmdbId})}" method="post">
+                    <div class="star-rating">
+                        <input type="radio" id="star5" name="voto" value="5" required /><label for="star5">★</label>
+                        <input type="radio" id="star4" name="voto" value="4" /><label for="star4">★</label>
+                        <input type="radio" id="star3" name="voto" value="3" /><label for="star3">★</label>
+                        <input type="radio" id="star2" name="voto" value="2" /><label for="star2">★</label>
+                        <input type="radio" id="star1" name="voto" value="1" /><label for="star1">★</label>
+                    </div>
+                    <textarea name="testo" placeholder="La tua recensione..." required></textarea>
+                    <div class="review-options">
+                        <label class="spoiler-check">
+                            <input type="checkbox" name="spoilerAlert"> Contiene Spoiler
+                        </label>
+                    </div>
+                    <button type="submit" class="btn-pubblica">Pubblica Recensione</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function openReviewModal() {
+        document.getElementById("reviewModal").classList.add("active");
+    }
+
+    function closeReviewModal() {
+        document.getElementById("reviewModal").classList.remove("active");
+    }
+
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById("reviewModal");
+        if (event.target === modal) {
+            closeReviewModal();
+        }
+    });
+
+    function openAddToListModal() {
+        document
+            .getElementById("addToListModal")
+            .classList.add("addlist-open");
+    }
+
+    function closeAddToListModal() {
+        document
+            .getElementById("addToListModal")
+            .classList.remove("addlist-open");
+    }
+
+    function updateListAction(select) {
+        const form = document.getElementById("addToListForm");
+        const listId = select.value;
+        if (listId) {
+            form.action = `/film/lists/${listId}/add`;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const alert = document.querySelector(".alert.success");
+        if (alert) {
+            setTimeout(() => {
+                alert.classList.add("hide");
+                setTimeout(() => alert.remove(), 350);
+            }, 3000);
+        }
+    });
+
+</script>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

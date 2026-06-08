@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Login - Fidelio</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body.login-page {
+            margin:0;
+            background: linear-gradient(rgba(0,0,0,.8), rgba(0,0,0,.8)),
+            url("/images/collage_movies.jpg") center/cover fixed;
+            font-family:'Inter', sans-serif;
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+        }
+
+        /* Navbar compatta */
+        .login-page .nav-inner { height:64px; }
+        .login-page .nav-logo--img img {
+            height:56px;
+            transform:none;
+            filter:none;
+        }
+
+        .main-wrapper {
+            flex:1;
+            display:flex;
+            justify-content:center;
+            align-items:flex-start;
+            padding:32px 20px 48px;
+        }
+
+        .panel {
+            max-width:420px;
+            width:100%;
+            padding:48px 40px;
+            background:var(--panel);
+            border-radius:var(--radius);
+            border:1px solid var(--stroke-2);
+            box-shadow:var(--shadow);
+            animation:fadeIn .4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity:0; transform:translateY(10px); }
+            to { opacity:1; transform:none; }
+        }
+
+        .panel h1 {
+            text-align:center;
+            margin-bottom:32px;
+            font-size:32px;
+        }
+
+        .signup-link-section {
+            margin-top:32px;
+            padding-top:24px;
+            border-top:1px solid rgba(255,255,255,.06);
+            text-align:center;
+        }
+
+        .btn-secondary {
+            display:block;
+            width:100%;
+            padding:14px;
+            border-radius:var(--radius);
+            border:1px solid var(--stroke-2);
+            background:rgba(255,255,255,.04);
+            color:var(--text);
+            text-decoration:none;
+            font-weight:600;
+        }
+    </style>
+</head>
+<body class="login-page">
+<header class="topnav">
+    <div class="nav-inner">
+        <a th:href="@{/}" class="nav-logo nav-logo--img">
+            <img src="/images/logo-removebg-preview.png" alt="Fidelio" />
+        </a>
+    </div>
+</header>
+
+<div class="main-wrapper">
+    <section class="panel">
+        <h1>Accedi</h1>
+
+        <!-- Errore login -->
+        <div class="alert alert-error" th:if="${param.error}">
+            Email o password errati
+        </div>
+
+        <!-- Successo logout -->
+        <div class="alert alert-success" th:if="${param.logout}">
+            Logout effettuato con successo
+        </div>
+
+        <form th:action="@{/perform_login}" method="post">
+            <div class="field" style="margin-bottom: 24px;">
+                <label style="display: block; margin-bottom: 8px; color: var(--muted); font-size: 14px;">Email</label>
+                <input type="email"
+                       name="username"
+                       required
+                       style="width: 100%; height: 52px; padding: 0 18px; border-radius: var(--radius); border: 1px solid var(--stroke-2); background: var(--panel-2); color: var(--text); outline: none;"
+                       th:classappend="${param.error} ? 'error-border'" />
+            </div>
+
+            <div class="field" style="margin-bottom: 32px;">
+                <label style="display: block; margin-bottom: 8px; color: var(--muted); font-size: 14px;">Password</label>
+                <input type="password"
+                       name="password"
+                       required
+                       style="width: 100%; height: 52px; padding: 0 18px; border-radius: var(--radius); border: 1px solid var(--stroke-2); background: var(--panel-2); color: var(--text); outline: none;"
+                       th:classappend="${param.error} ? 'error-border'" />
+            </div>
+
+            <button type="submit"
+                    style="width: 100%; height: 56px; background: var(--accent); color: white; border: none; border-radius: var(--radius); font-weight: 600; font-size: 16px; cursor: pointer; transition: transform 0.1s ease;">
+                Accedi
+            </button>
+        </form>
+
+        <div class="signup-link-section">
+            <p>Non hai ancora un account?</p>
+            <a th:href="@{/signup}" class="btn-secondary">Crea un account ora</a>
+        </div>
+    </section>
+</div>
+
+<!-- Rimuoviamo il vecchio script JS con fetch e localStorage -->
+</body>
+</html>

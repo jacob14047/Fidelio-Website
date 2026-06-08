@@ -1,0 +1,492 @@
+:root {
+    --accent-orange: #ff9f43;
+}
+
+/* ========== FOOTER ========== */
+
+.site-footer{
+    margin-top: 96px;
+    border-top: 1px solid rgba(255,255,255,.10);
+    background: linear-gradient(
+            to bottom,
+            rgba(255,255,255,.02),
+            rgba(0,0,0,.15)
+    );
+}
+
+.footer-grid{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 26px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+}
+
+.footer-links{
+    justify-self: end;
+    margin-right: 36px;
+    display: flex;
+    gap: 22px;
+}
+
+.footer-links a{
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+    opacity: .85;
+    text-decoration: none;
+}
+
+.footer-links a:hover{
+    opacity: 1;
+}
+
+.footer-social{
+    justify-self: start;
+    margin-left: 36px;
+    display: flex;
+    gap: 12px;
+}
+
+.social-link{
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    border: 1px solid var(--stroke-2);
+    color: var(--accent);
+    transition: transform .16s ease, border-color .16s ease;
+}
+
+.social-link:hover{
+    transform: translateY(-2px);
+    border-color: var(--accent);
+}
+
+.social-link svg{
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.footer-bottom{
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    padding-bottom: 20px;
+}
+
+
+/* ========================================== */
+/* ========== NAVBAR STILI BASE (DESKTOP) ========== */
+/* ========================================== */
+
+.topnav{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+
+    background: rgba(20, 24, 32, 0.35);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* contenitore navbar */
+.nav-inner{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 76px;
+
+    /* Desktop Grid: 1. Logo | 2. Nav Center | 3. Search | 4. Actions */
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Posizionamento degli elementi Desktop */
+.nav-center {
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+    height: 100%;
+}
+.nav-search--desktop {
+    grid-column: 3;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+}
+.nav-actions--desktop {
+    grid-column: 4;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    height: 100%;
+}
+
+/* Elementi mobile nascosti su desktop */
+.nav-toggle-btn,
+.nav-mobile-menu {
+    display: none;
+}
+
+/* ========== Logo ========== */
+
+.nav-logo--img{
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.nav-logo--img img{
+    height: 92px;
+    width: auto;
+    display: block;
+
+    transform: translateY(1px);
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,.25));
+}
+
+/* ========== Link e Azioni Base ========== */
+
+.nav-item{
+    color: rgba(255,255,255,.78);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+
+    height: 100%;
+    padding: 0 4px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    transition: color .15s ease;
+}
+
+.nav-item:hover{
+    color: rgba(255,255,255,.95);
+}
+
+.nav-item-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    height: 100%;
+}
+
+/* ========== Profile ========== */
+
+.nav-item--profile {
+    gap: 10px;
+}
+
+.nav-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(240, 106, 42, 0.6);
+}
+
+/* ========== Logout ========== */
+
+.nav-logout-form {
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    margin: 0;
+}
+
+.nav-item--logout {
+    background: none;
+    border: none;
+    height: 100%;
+    padding: 0 4px;
+
+    cursor: pointer;
+    color: rgba(255,255,255,.78);
+    font-family: inherit;
+    font-size: 13px;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+
+    display: flex;
+    align-items: center;
+    transition: color .15s ease;
+}
+
+.nav-item--logout:hover {
+    color: rgba(255,255,255,.95);
+}
+
+/* ========== Search and Filters ========== */
+
+.nav-filter-select {
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(0,0,0,.25);
+    color: rgba(255,255,255,.9);
+    outline: none;
+    font-size: 13px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="12" width="12" viewBox="0 0 448 512"><path fill="%23ff9f43" d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 28px;
+}
+
+.nav-filter-select option {
+    background: rgba(20, 24, 32, 1);
+    color: white;
+}
+
+
+.nav-search-input{
+    width: min(320px, 40vw);
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(0,0,0,.25);
+    color: rgba(255,255,255,.9);
+    outline: none;
+}
+
+.nav-search-btn{
+    height: 36px;
+    width: 36px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(0,0,0,.25);
+    color: rgba(255,255,255,.85);
+    cursor: pointer;
+    font-size: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: transform .12s ease, border-color .12s ease;
+}
+
+.nav-search-btn:hover{
+    transform: translateY(-1px);
+    border-color: rgba(240,106,42,.6);
+}
+
+
+/* ========================================== */
+/* ========== Responsive Mobile (Hamburger) ========== */
+/* ========================================== */
+
+@media (max-width: 992px) {
+
+    /* 1. Struttura del Nav-Inner su Mobile */
+    .nav-inner {
+        /* Mobile Grid: 1. Logo | 2. Spazio | 3. Hamburger Button */
+        grid-template-columns: auto 1fr auto;
+        gap: 0;
+        height: 60px; /* Altezza ridotta su mobile */
+        padding: 0 16px;
+    }
+
+    /* 2. Nasconde elementi Desktop */
+    .nav-center,
+    .nav-search--desktop,
+    .nav-actions--desktop {
+        display: none !important;
+    }
+
+    /* 3. Mostra il bottone Hamburger */
+    .nav-toggle-btn {
+        display: block;
+        grid-column: 3;
+        grid-row: 1;
+        justify-self: end; /* Allinea a destra */
+
+        /* Stile del Bottone Hamburger */
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 24px;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+    }
+
+    /* 4. Menu Overlay/Contenitore Mobile */
+    .nav-mobile-menu {
+        /* Inizialmente nascosto */
+        display: none;
+        position: fixed;
+        top: 60px; /* Sotto la navbar */
+        left: 0;
+        width: 100%;
+        min-height: calc(100vh - 60px);
+        background: rgba(20, 24, 32, 0.95); /* Sfondo scuro per l'overlay */
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 40;
+        padding: 20px 24px;
+
+        flex-direction: column;
+        gap: 30px;
+
+        border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* Classe da attivare con JS per mostrare il menu */
+    .nav-mobile-menu.is-open {
+        display: flex;
+    }
+
+    /* Stile per la ricerca nel menu mobile */
+    .nav-search--mobile {
+        display: flex;
+        flex-wrap: wrap; /* Permette l'avvolgimento se necessario */
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav-search--mobile .nav-search-input {
+        width: calc(100% - 46px); /* 100% meno il bottone di ricerca + gap */
+        order: 1;
+    }
+
+    .nav-search--mobile .nav-search-btn {
+        order: 2;
+    }
+
+    .nav-search--mobile .nav-filter-select {
+        display: block;
+        width: calc(50% - 5px); /* Due filtri per riga */
+        order: 3;
+    }
+
+    /* Stile per gli elementi interni del menu mobile */
+    .nav-mobile-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0; /* Rimosso il gap */
+    }
+
+    .nav-mobile-links .nav-item {
+        justify-content: flex-start;
+        height: auto;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        text-transform: capitalize; /* Reso il testo meno "aggressivo" per mobile */
+        font-size: 16px;
+    }
+
+    .nav-mobile-auth {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav-mobile-auth .nav-item-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .nav-mobile-auth .nav-item {
+        height: auto;
+        padding: 12px 0;
+        font-size: 16px;
+        text-transform: capitalize;
+    }
+
+    .nav-mobile-auth .nav-item--profile {
+        padding: 0;
+        border: none;
+    }
+
+    .nav-mobile-auth .nav-logout-form {
+        height: auto;
+    }
+
+    .nav-mobile-auth .nav-item--logout {
+        justify-content: flex-start;
+        padding: 12px 0;
+        height: auto;
+        color: var(--accent-orange);
+        font-size: 16px;
+        text-transform: capitalize;
+    }
+
+} /* Fine media query 992px */
+
+/* ========== Offset per navbar fixed ========== */
+
+body {
+    padding-top: 76px; /* Altezza desktop predefinita */
+}
+
+@media (max-width: 992px) {
+    body {
+        padding-top: 60px; /* Altezza mobile */
+    }
+}
+
+/* ========================================== */
+/* ========== UTILITY: HERO COMPATTA (Per /filmlist) ========== */
+/* ========================================== */
+
+.hero--compact {
+    /* Manteniamo uno sfondo base o un'immagine se presente, ma riduciamo lo spazio */
+    /* Assicurati che il tuo CSS base per .hero non abbia min-height troppo elevati */
+
+    /* Riduciamo il padding verticale per compattare la sezione */
+    padding-top: 60px; /* Spazio ridotto */
+    padding-bottom: 60px; /* Spazio ridotto */
+}
+
+/* Forziamo l'allineamento in alto se necessario, a seconda del CSS base */
+.hero--compact .hero-inner {
+    display: flex; /* Assicuriamo che il contenuto possa essere allineato */
+    align-items: flex-start; /* Allinea il contenuto in alto */
+    justify-content: center;
+    min-height: auto; /* Rimuoviamo l'altezza minima se presente */
+}
+
+.hero--compact .hero-tagline {
+    /* Potresti aver bisogno di margine extra in base al design */
+    margin-top: 0;
+}
+
+
+/* Media query per la vista mobile (opzionale, ma consigliato) */
+@media (max-width: 768px) {
+    .hero--compact {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+}

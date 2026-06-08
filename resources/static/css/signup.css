@@ -1,0 +1,250 @@
+body.signup-page {
+    margin: 0;
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+        url("/images/collage_movies.jpg") center/cover fixed;
+    font-family: "Inter", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+.signup-page .nav-inner {
+    height: 64px;
+}
+.signup-page .nav-logo--img img {
+    height: 56px;
+}
+.topnav {
+    flex-shrink: 0;
+}
+
+.main-wrapper {
+    flex: 1;
+    padding: 32px 20px 64px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.panel {
+    max-width: 850px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 16px;
+    background: rgba(20, 20, 30, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.5s ease-out;
+    backdrop-filter: blur(10px);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.panel h1 {
+    text-align: center;
+    margin-bottom: 32px;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+/* --- TIER CARDS ORIZZONTALI --- */
+.tier-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 40px;
+}
+
+.tier-card {
+    padding: 16px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.03);
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+}
+
+.tier-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    transform: translateX(5px);
+}
+
+.tier-card.selected {
+    border-color: #f06a2a;
+    background: rgba(240, 106, 42, 0.1);
+    box-shadow: 0 4px 15px rgba(240, 106, 42, 0.1);
+}
+
+.tier-info {
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+}
+
+.tier-card h3 {
+    font-size: 18px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.price {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.tier-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    flex-grow: 1;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 24px;
+}
+
+.tier-card ul li {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+}
+
+.tier-card ul li::before {
+    content: "•";
+    color: #f06a2a;
+    margin-right: 6px;
+    font-weight: bold;
+}
+
+/* --- FORM STYLES --- */
+.name-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+.field {
+    margin-bottom: 20px;
+}
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="url"],
+input[type="tel"] {
+    width: 100%;
+    height: 50px;
+    background: rgba(30, 30, 40, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: white;
+    padding: 0 16px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+input:focus {
+    outline: none;
+    border-color: #f06a2a;
+}
+
+.extra-fields {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+.extra-fields.visible {
+    max-height: 300px;
+    opacity: 1;
+    margin-top: 10px;
+    padding: 15px 0;
+}
+
+button[type="submit"] {
+    width: 100%;
+    height: 56px;
+    background: #f06a2a;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* --- LOGIN SECTION (BOTTONE BIANCO) --- */
+.login-link-section {
+    margin-top: 32px;
+    padding-top: 32px;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.login-link-section p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 16px;
+}
+
+.btn-white {
+    display: inline-block;
+    background: white;
+    color: #14141e; /* Colore scuro del background per contrasto */
+    padding: 12px 32px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    border: 1px solid white;
+}
+
+.btn-white:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+    .tier-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .tier-card ul {
+        margin: 12px 0 0 0;
+        padding: 12px 0 0 0;
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .name-row {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="'Ricerca • Fidelio'">Ricerca • Fidelio</title>
+
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+</head>
+
+<body>
+<div class="page">
+
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="content">
+
+        <section class="section">
+            <div class="section-head">
+                <h2 th:if="${query != null and !query.isEmpty()}" th:text="'Risultati di ricerca per: ' + ${query}"></h2>
+
+                <h2 th:if="${(query == null || query.isEmpty()) and (genere != null or anno != null)}">
+                    Risultati filtrati
+                    <span th:if="${genere != null}" th:text="' (Genere: ' + ${genere} + ')'"></span>
+                    <span th:if="${anno != null}" th:text="' (Anno: ' + ${anno} + ')'"></span>
+                </h2>
+
+                <h2 th:if="${(query == null || query.isEmpty()) and genere == null and anno == null}">Inserisci un termine di ricerca o applica filtri</h2>
+            </div>
+
+            <div class="grid">
+                <a class="card"
+                   th:each="film : ${results}"
+                   th:href="@{/film/{id}(id=${film.tmdbId})}"> <div class="card-inner">
+                    <div class="poster">
+
+                        <img th:if="${film.posterUrl != null}"
+                             th:src="${film.posterUrl}"
+
+                             th:alt="${film.title}" />
+
+                        <div th:if="${film.posterUrl == null}" class="poster-fallback">
+                            <span th:text="${film.title}">Film</span>
+                        </div>
+                    </div>
+
+                    <div class="poster-overlay" th:if="${film.rating > 0}">
+                        <div class="rating">
+                            <span th:text="${#numbers.formatDecimal(film.rating, 1, 1)}">8.1</span>
+                        </div>
+                    </div>
+                </div>
+                </a>
+            </div>
+
+            <div class="empty-state" th:if="${(query != null and !query.isEmpty() or genere != null or anno != null) and (results == null || #lists.isEmpty(results))}">
+                <p th:text="'Nessun risultato trovato per i criteri selezionati.'">Nessun risultato trovato.</p>
+            </div>
+
+            <div class="empty-state" th:if="${query == null and genere == null and anno == null}">
+                <p>Inserisci un film o applica i filtri per iniziare la ricerca.</p>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Questi ID devono corrispondere a quelli nel tuo frammento navbar
+        const genereSelect = document.getElementById('filter-genere');
+        const annoSelect = document.getElementById('filter-anno');
+
+        // Legge i valori passati dal controller e li imposta nel form
+        const currentGenere = "[[${genere}]]";
+        const currentAnno = "[[${anno}]]";
+
+        // Imposta i valori per mantenere lo stato del filtro
+        if (genereSelect && currentGenere && currentGenere !== 'null') {
+            genereSelect.value = currentGenere;
+        }
+        if (annoSelect && currentAnno && currentAnno !== 'null') {
+            annoSelect.value = currentAnno;
+        }
+    });
+</script>
+
+</body>
+</html>

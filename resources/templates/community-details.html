@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Community - Fidelio</title>
+
+    <!-- STILE: Dare importanza all'ordine -->
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/components.css}" />
+    <link rel="stylesheet" th:href="@{/css/community.css}" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="topnav">
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="comm-container">
+
+            <!-- SIDEBAR SINISTRA -->
+            <aside class="sidebar-left">
+                <div class="comm-card-info">
+                    <span class="comm-icon-large">🎬</span>
+                    <h1 class="comm-title" id="cName">Caricamento...</h1>
+                    <div class="comm-stats" id="cMembers">0 Membri</div>
+
+                    <button id="joinBtn" class="btn primary full-width" onclick="toggleJoin()">Unisciti</button>
+
+                    <div class="comm-desc">
+                        <p id="cDesc">...</p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- FEED CENTRALE -->
+            <main class="main-feed">
+                <!-- Input Box -->
+                <div class="create-post-box" id="inputArea">
+                    <input type="text" id="tTitle" class="cp-input" placeholder="Titolo discussione...">
+                    <textarea id="tContent" class="cp-input" rows="3" placeholder="Scrivi qualcosa..."></textarea>
+                    <div class="cp-actions">
+                        <button class="btn primary" onclick="postThread()">Pubblica</button>
+                    </div>
+                </div>
+
+                <div class="feed-tabs">
+                    <div class="tab active">Discussioni</div>
+                    <div class="tab">Popolari</div>
+                </div>
+
+                <div id="threadList">
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <div th:replace="~{fragments/footer :: footer}"></div>
+    </footer>
+    <script th:src="@{/js/community-details.js}"></script>
+</body>
+</html>

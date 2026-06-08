@@ -1,0 +1,163 @@
+/* ================= LIST DETAIL – GRID POSTER ================= */
+
+.section-head--center h2{
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+    color: rgba(255,255,255,.95);
+}
+
+.list-subtitle{
+    font-size: 14px;
+    color: rgba(255,255,255,.65);
+}
+
+
+.grid{
+    display: grid;
+    grid-template-columns: repeat(3, 190px); /* PIÙ GRANDI */
+    gap: 26px;
+    justify-content: center;
+    margin-top: 32px;
+}
+
+
+/* Card */
+.card{
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.poster{
+    position: relative;
+    width: 190px;
+    aspect-ratio: 2 / 3;
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(0,0,0,.35);
+    border: 1px solid rgba(255,255,255,.12);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+
+/* Hover lift */
+.card:hover .poster{
+    transform: translateY(-4px);
+    box-shadow: 0 14px 36px rgba(0,0,0,.55);
+}
+
+/* Image */
+.poster img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Fallback */
+.poster-fallback{
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255,255,255,.8);
+    background: rgba(0,0,0,.45);
+}
+
+/* Overlay */
+.poster-overlay{
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+            to top,
+            rgba(0,0,0,.85),
+            rgba(0,0,0,.35),
+            rgba(0,0,0,0)
+    );
+    opacity: 0;
+    transition: opacity .2s ease;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+/* Show on hover */
+.card:hover .poster-overlay{
+    opacity: 1;
+}
+
+.rating{
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff;
+    background: rgba(0,0,0,.65);
+    padding: 5px 10px;
+    border-radius: 999px;
+}
+
+/* Remove button */
+.remove-btn{
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    border: none;
+    background: rgba(240,106,42,.95);
+    color: #0c0c0e;
+    font-size: 15px;
+    font-weight: 900;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.remove-btn:hover{
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(240,106,42,.55);
+}
+
+/* ================= HEADER ================= */
+
+.section-head--center{
+    text-align: center;
+}
+
+.list-subtitle{
+    margin-top: 6px;
+    font-size: 13px;
+    color: rgba(255,255,255,.65);
+}
+
+.poster-link{
+    text-decoration: none;
+    display: inline-block;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px){
+    .grid{
+        grid-template-columns: repeat(2, 180px);
+    }
+}
+
+@media (max-width: 520px){
+    .grid{
+        grid-template-columns: 1fr;
+    }
+
+    .poster{
+        width: 240px;
+        margin: 0 auto;
+    }
+}
+

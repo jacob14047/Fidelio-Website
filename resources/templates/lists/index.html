@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/lists.css}">
+    <title>Le mie liste</title>
+</head>
+
+
+<body>
+
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<!-- CREATE LIST MODAL -->
+<div id="createListModal" class="modal-overlay">
+
+    <div class="modal-card">
+        <h3>Crea nuova lista</h3>
+
+        <form th:action="@{/lists}"
+              th:object="${listaForm}"
+              method="post"
+              class="list-form">
+
+            <div class="form-group">
+                <label>Nome lista</label>
+                <input type="text"
+                       th:field="*{nome}"
+                       required
+                       maxlength="100"
+                       placeholder="Es. Film visti nel 2024">
+            </div>
+
+            <div class="form-group">
+                <label>Descrizione</label>
+                <textarea th:field="*{descrizione}"
+                          rows="4"
+                          placeholder="Descrivi la tua lista…"></textarea>
+            </div>
+
+
+            <div class="modal-actions">
+                <button type="submit" class="btn-primary">
+                    Crea lista
+                </button>
+
+                <button type="button"
+                        class="btn-secondary"
+                        onclick="closeCreateListModal()">
+                    Annulla
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<div class="page">
+    <div class="content">
+        <section class="section">
+            <div class="section-head">
+                <h2>Le mie liste</h2>
+
+                <button type="button"
+                        class="btn-primary"
+                        onclick="openCreateListModal()">
+                    + Crea lista
+                </button>
+            </div>
+
+
+            <div class="lists-lb">
+                <a th:each="lista : ${lists}"
+                   th:href="@{/lists/{id}(id=${lista.id})}"
+                   class="lb-list-card">
+
+                    <!-- Poster stack -->
+                    <div class="lb-posters">
+                        <div class="lb-poster"
+                             th:each="movie : ${lista.previewMovies}"
+                             th:style="'background-image:url(https://image.tmdb.org/t/p/w300' + ${movie.posterPath} + ')'">
+                        </div>
+                    </div>
+
+                    <!-- Meta -->
+                    <div class="lb-meta">
+                        <h3 th:text="${lista.nome}">Nome lista</h3>
+                        <p th:text="${lista.descrizione}">Descrizione lista</p>
+
+                        <div class="lb-sub">
+                            <span th:text="${lista.filmCount}"></span> film ·
+                            <span th:text="${lista.username}"></span>
+
+                        </div>
+                    </div>
+
+                </a>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script th:src="@{/js/lists.js}"></script>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

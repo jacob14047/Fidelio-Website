@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8" />
+</head>
+
+<body>
+
+<header class="topnav" th:fragment="navbar">
+    <div class="nav-inner">
+
+        <a th:href="@{/}" class="nav-logo nav-logo--img">
+            <img src="/images/logo-removebg-preview.png" alt="Fidelio" />
+        </a>
+
+        <nav class="nav-center">
+            <a class="nav-item" th:href="@{/filmlist}">Films</a>
+            <a class="nav-item" th:href="@{/lists}">Lists</a>
+            <a class="nav-item" sec:authorize="isAuthenticated()" th:href="@{/communities}">Community</a>
+        </nav>
+
+        <form class="nav-search nav-search--desktop" th:action="@{/search}" method="get" role="search">
+            <select id="filter-genere" name="genere" class="nav-filter-select">
+                <option value="">Genere</option>
+                <option value="Action">Azione</option>
+                <option value="Comedy">Commedia</option>
+                <option value="Horror">Horror</option>
+            </select>
+
+            <select id="filter-anno" name="anno" class="nav-filter-select">
+                <option value="">Anno</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+            </select>
+            <input class="nav-search-input" type="search" name="q" placeholder="Search films..." autocomplete="off" />
+            <button class="nav-search-btn" type="submit">⌕</button>
+        </form>
+
+        <div class="nav-actions nav-actions--desktop">
+
+            <div sec:authorize="!isAuthenticated()" class="nav-item-group">
+                <a class="nav-item" th:href="@{/login}">Login</a>
+                <a class="nav-item" th:href="@{/signup}">Create account</a>
+            </div>
+
+            <a class="nav-item nav-item--profile"
+               sec:authorize="isAuthenticated()"
+               th:href="@{/profilo}">
+
+                <img th:if="${#authentication.principal.utente.immagineProfilo != null}"
+                     th:src="@{'data:image/jpeg;base64,' + ${@utenteService.encodeToBase64(#authentication.principal.utente.immagineProfilo)}}"
+                     alt="Avatar"
+                     class="nav-avatar">
+
+                <img th:unless="${#authentication.principal.utente.immagineProfilo != null}"
+                     src="/images/default-avatar.png"
+                     alt="Avatar"
+                     class="nav-avatar">
+
+                <span th:text="${#authentication.principal.utente.username}">User</span>
+            </a>
+
+            <form th:action="@{/logout}" method="post" class="nav-logout-form" sec:authorize="isAuthenticated()">
+                <button type="submit" class="nav-item nav-item--logout">
+                    Esci
+                </button>
+            </form>
+        </div>
+
+        <button id="menu-toggle" class="nav-toggle-btn" aria-expanded="false" aria-controls="mobile-menu">
+            ☰
+        </button>
+
+        <div id="mobile-menu" class="nav-mobile-menu">
+
+            <form class="nav-search nav-search--mobile" th:action="@{/search}" method="get" role="search">
+                <input class="nav-search-input" type="search" name="q" placeholder="Search films..." autocomplete="off" />
+                <button class="nav-search-btn" type="submit">⌕</button>
+
+                <select id="filter-genere-mobile" name="genere" class="nav-filter-select">
+                    <option value="">Genere</option>
+                    <option value="Azione">Azione</option>
+                    <option value="Commedia">Commedia</option>
+                    <option value="Horror">Horror</option>
+                </select>
+
+                <select id="filter-anno-mobile" name="anno" class="nav-filter-select">
+                    <option value="">Anno</option>
+                    <option value="2025">2025</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                </select>
+            </form>
+
+            <div class="nav-mobile-links">
+                <a class="nav-item" th:href="@{/filmlist}">Films</a>
+                <a class="nav-item" th:href="@{/lists}">Lists</a>
+                <a class="nav-item" sec:authorize="isAuthenticated()" th:href="@{/diary}">Diary</a>
+            </div>
+
+            <div class="nav-mobile-auth">
+                <div sec:authorize="!isAuthenticated()" class="nav-item-group nav-item-group--mobile">
+                    <a class="nav-item" th:href="@{/login}">Login</a>
+                    <a class="nav-item" th:href="@{/signup}">Create account</a>
+                </div>
+
+                <a class="nav-item nav-item--profile nav-item--mobile"
+                   sec:authorize="isAuthenticated()"
+                   th:href="@{/profilo}">
+
+                    <img th:if="${#authentication.principal.utente.immagineProfilo != null}"
+                         th:src="@{'data:image/jpeg;base64,' + ${@utenteService.encodeToBase64(#authentication.principal.utente.immagineProfilo)}}"
+                         alt="Avatar"
+                         class="nav-avatar">
+
+                    <img th:unless="${#authentication.principal.utente.immagineProfilo != null}"
+                         src="/images/default-avatar.png"
+                         alt="Avatar"
+                         class="nav-avatar">
+                    <span th:text="${#authentication.principal.utente.username}">User</span>
+                </a>
+
+                <form th:action="@{/logout}" method="post" class="nav-logout-form nav-logout-form--mobile" sec:authorize="isAuthenticated()">
+                    <button type="submit" class="nav-item nav-item--logout">
+                        Esci
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButton = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (toggleButton && mobileMenu) {
+                toggleButton.addEventListener('click', function() {
+                    // 1. Alterna la classe CSS 'is-open' per mostrare/nascondere il menu
+                    mobileMenu.classList.toggle('is-open');
+
+                    // 2. Aggiorna l'icona del bottone
+                    const isExpanded = mobileMenu.classList.contains('is-open');
+
+                    if (isExpanded) {
+                        toggleButton.innerHTML = '✕'; // Simbolo X
+                    } else {
+                        toggleButton.innerHTML = '☰'; // Simbolo Hamburger
+                    }
+
+                    // 3. Aggiorna l'attributo ARIA per l'accessibilità
+                    toggleButton.setAttribute('aria-expanded', isExpanded);
+                });
+            }
+        });
+    </script>
+</header>
+
+</body>
+</html>

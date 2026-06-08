@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Errore - Fidelio</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        .error-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+            background: var(--bg);
+        }
+
+        .error-panel {
+            max-width: 600px;
+            width: 100%;
+            padding: 60px 40px;
+            text-align: center;
+            background: var(--panel);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 2px solid var(--stroke);
+        }
+
+        .error-code {
+            font-family: 'Cinzel', serif;
+            font-size: 120px;
+            font-weight: 700;
+            line-height: 1;
+            margin: 0 0 20px 0;
+            color: var(--accent);
+            text-shadow: 0 4px 20px rgba(240,106,42,.3);
+        }
+
+        .error-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0 0 16px 0;
+            color: var(--text);
+        }
+
+        .error-message {
+            font-size: 18px;
+            color: var(--muted);
+            line-height: 1.6;
+            margin: 0 0 40px 0;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 14px 28px;
+            background: var(--accent);
+            color: #0c0c0e;
+            font-weight: 700;
+            font-size: 16px;
+            border-radius: 999px;
+            text-decoration: none;
+            transition: all .2s ease;
+            box-shadow: 0 8px 25px rgba(240,106,42,.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(240,106,42,.4);
+            background: var(--accent-2);
+        }
+
+        .btn-secondary {
+            padding: 14px 28px;
+            background: transparent;
+            color: var(--text);
+            font-weight: 600;
+            font-size: 16px;
+            border: 2px solid var(--stroke-2);
+            border-radius: 999px;
+            text-decoration: none;
+            transition: all .2s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 90px;
+            }
+            .error-title {
+                font-size: 28px;
+            }
+            .error-panel {
+                padding: 48px 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="error-page">
+    <div class="error-panel">
+        <!-- Codice errore dinamico (se disponibile) -->
+        <h1 class="error-code" th:text="${status} ?: 'Oops!'">Oops!</h1>
+
+        <!-- Titolo dinamico -->
+        <h2 class="error-title" th:text="${error} ?: 'Qualcosa è andato storto'">Qualcosa è andato storto</h2>
+
+        <!-- Messaggio dinamico -->
+        <p class="error-message" th:text="${message} ?: 'La pagina che stai cercando non è disponibile o si è verificato un errore imprevisto.'">
+            La pagina che stai cercando non è disponibile o si è verificato un errore imprevisto.
+        </p>
+
+        <div class="error-actions">
+            <a th:href="@{/}" class="btn-primary">Torna alla Home</a>
+            <a href="javascript:window.history.back()" class="btn-secondary">Indietro</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

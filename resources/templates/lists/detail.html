@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <link rel="stylesheet" th:href="@{/css/components.css}">
+    <link rel="stylesheet" th:href="@{/css/list-detail-grid.css}">
+    <link rel="stylesheet" th:href="@{/css/lists.css}">
+    <title>Dettaglio lista</title>
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="page">
+    <div class="content">
+        <section class="section">
+            <div class="section-head section-head--center">
+                <h2 th:text="${listName}">Nome lista</h2>
+                <p class="list-subtitle">
+                    <span th:text="${#lists.size(movies)}">0</span> film presenti nella lista
+                </p>
+            </div>
+
+            <div class="grid">
+                <div class="card" th:each="movie : ${movies}">
+                    <div class="card-inner">
+                        <a th:href="@{/film/{id}(id=${movie.id})}" class="poster-link">
+                        <div class="poster">
+                            <img th:if="${movie.posterPath != null}"
+                                 th:src="'https://image.tmdb.org/t/p/w300' + ${movie.posterPath}">
+
+                            <div th:if="${movie.posterPath == null}"
+                                 class="poster-fallback"
+                                 th:text="${movie.title}">
+                            </div>
+
+                            <div class="poster-overlay">
+                                <span class="rating"
+                                      th:text="${#numbers.formatDecimal(movie.voteAverage,1,1)}">
+                                </span>
+
+                                <span class="rating"
+                                      th:text="${#numbers.formatDecimal(movie.voteAverage,1,1)}">
+
+                                </span>
+
+                                <!-- RIMUOVI -->
+                                <form th:action="@{/lists/{listId}/remove(listId=${listId})}"
+                                      method="post"
+                                      class="remove-form">
+                                    <input type="hidden" name="tmdbId" th:value="${movie.id}">
+                                    <button type="submit"
+                                            class="remove-btn"
+                                            title="Rimuovi dalla lista"
+                                            onclick="return confirm('Rimuovere il film dalla lista?')">
+                                        ✕
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+
+</body>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</html>

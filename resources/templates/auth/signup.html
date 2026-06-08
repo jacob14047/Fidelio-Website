@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Registrazione - Fidelio</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/signup.css}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body class="signup-page">
+
+<header class="topnav">
+    <div class="nav-inner">
+        <a th:href="@{/}" class="nav-logo nav-logo--img">
+            <img src="/images/logo-removebg-preview.png" alt="Fidelio" />
+        </a>
+    </div>
+</header>
+
+<div class="main-wrapper">
+    <section class="panel">
+        <h1>Crea il tuo account</h1>
+
+        <div class="tier-grid">
+            <div class="tier-card selected" data-tier="Cinefilo">
+                <div class="tier-info">
+                    <h3>Cinefilo</h3>
+                    <div class="price">Appassionato</div>
+                </div>
+                <ul>
+                    <li>Traccia i film visti</li>
+                    <li>Recensisci e vota</li>
+                    <li>Liste personali</li>
+                </ul>
+            </div>
+
+            <div class="tier-card" data-tier="Critico">
+                <div class="tier-info">
+                    <h3>
+                        Critico
+                        <svg class="icon-badge verified-blue" viewBox="0 0 24 24">
+                            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-1.9 14.7l-3.3-3.3 1.4-1.4 1.9 1.9 4.6-4.6 1.4 1.4-6 6z"/>
+                        </svg>
+                    </h3>
+                    <div class="price">Profilo Verificato</div>
+                </div>
+                <ul>
+                    <li>Recensioni in evidenza</li>
+                    <li>Badge esperto</li>
+                    <li>Discussioni</li>
+                </ul>
+            </div>
+
+            <div class="tier-card" data-tier="Fedele">
+                <div class="tier-info">
+                    <h3>
+                        Fedele
+                        <svg class="icon-badge troupe-gold" viewBox="0 0 24 24">
+                            <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>
+                        </svg>
+                    </h3>
+                    <div class="price">Membro della Troupe</div>
+                </div>
+                <ul>
+                    <li>Gestisci community</li>
+                    <li>Moderazione</li>
+                    <li>Eventi esclusivi</li>
+                </ul>
+            </div>
+        </div>
+
+        <form id="signupForm">
+            <input type="hidden" id="dtype" value="Cinefilo">
+
+            <div class="name-row">
+                <div class="field">
+                    <label>Nome</label>
+                    <input type="text" id="nome" required placeholder="Mario">
+                </div>
+                <div class="field">
+                    <label>Cognome</label>
+                    <input type="text" id="cognome" required placeholder="Rossi">
+                </div>
+            </div>
+
+            <div class="name-row">
+                <div class="field">
+                    <label>Via e Numero Civico</label>
+                    <input type="text" id="viaEnumCivico" maxlength="30" placeholder="Via Roma 10">
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Username</label>
+                <input type="text" id="username" required placeholder="Scegli un username unico">
+            </div>
+
+            <div class="field">
+                <label>Email</label>
+                <input type="email" id="email" required placeholder="tuo@email.com">
+            </div>
+
+            <div class="name-row">
+                <div class="field">
+                    <label>Password</label>
+                    <input type="password" id="password" required minlength="8" placeholder="Minimo 8 caratteri">
+                </div>
+                <div class="field">
+                    <label>Conferma Password</label>
+                    <input type="password" id="confermaPassword" required placeholder="Ripeti password">
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Foto Profilo (Opzionale)</label>
+                <input type="file" id="fotoInput" accept="image/*" style="color: #888; font-size: 13px;">
+            </div>
+
+            <div id="critico-fields" class="extra-fields">
+                <div class="field">
+                    <label>Testata giornalistica</label>
+                    <input type="text" id="testata" placeholder="Es. Il Corriere della Sera">
+                </div>
+            </div>
+
+            <div id="fedele-fields" class="extra-fields">
+                <div class="field">
+                    <label>Casa di produzione</label>
+                    <input type="text" id="casa" placeholder="Es. Warner Bros">
+                </div>
+                <div class="field">
+                    <label>Link Portfolio / IMDB</label>
+                    <input type="text" id="credit" placeholder="https://www.imdb.com/...">
+                </div>
+            </div>
+
+            <div id="signup-error" style="display:none; color:#ff6b6b; margin-bottom:20px; text-align:center;"></div>
+
+            <button type="submit">Registrati</button>
+        </form>
+
+        <div class="login-link-section">
+            <p>Hai già un account?</p>
+            <a th:href="@{/login}" class="btn-white">Accedi ora</a>
+        </div>
+    </section>
+</div>
+<script th:src="@{/js/signup.js}"></script>
+</body>
+</html>

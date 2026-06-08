@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<footer class="site-footer" th:fragment="footer">
+    <div class="container footer-grid">
+
+        <!-- LEFT -->
+        <div class="footer-links">
+            <a th:href="@{/about}">About</a>
+            <a href="https://www.themoviedb.org/documentation/api" target="_blank" rel="noopener">
+                API
+            </a>
+            <a th:href="@{/contact}">Contact</a>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="footer-social">
+            <a href="#" aria-label="Instagram" class="social-link">
+                <!-- Instagram SVG -->
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5.8a4.2 4.2 0 1 0 0 8.4 4.2 4.2 0 0 0 0-8.4zm6.5-.9a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                </svg>
+            </a>
+
+            <a href="#" aria-label="Facebook" class="social-link">
+                <!-- Facebook SVG -->
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M13 22v-9h3l.5-4H13V7.2c0-1 .3-1.7 1.8-1.7H17V2.1A28 28 0 0 0 14.4 2c-2.7 0-4.4 1.6-4.4 4.6V9H7v4h3v9h3z"/>
+                </svg>
+            </a>
+
+            <a href="#" aria-label="TikTok" class="social-link">
+                <!-- TikTok SVG -->
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M16 2c.4 2.3 1.8 3.7 4 4v4c-1.5.1-2.8-.3-4-1v7.3a5.7 5.7 0 1 1-5.7-5.7c.4 0 .8 0 1.2.1v4a1.7 1.7 0 1 0 1.7 1.7V2h2.8z"/>
+                </svg>
+            </a>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>© <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> Fidelio — Made for cinephiles.</p>
+    </div>
+</footer>
+<script th:src="@{/js/auth.js}"></script>
+</body>
+</html>
